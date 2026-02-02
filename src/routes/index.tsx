@@ -3,9 +3,5 @@ import { createFileRoute } from '@tanstack/react-router'
 export const Route = createFileRoute('/')({ component: App })
 
 function App() {
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center">
-      <div className="font-medium">Understanding shadcn/ui</div>
-    </div>
-  )
+  return <h1>Hello world</h1>
 }
