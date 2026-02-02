@@ -11,6 +11,11 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardLayoutRouteImport } from './routes/dashboard/_layout'
+import { Route as DashboardLayoutIndexRouteImport } from './routes/dashboard/_layout/index'
+import { Route as DashboardLayoutUsersIndexRouteImport } from './routes/dashboard/_layout/users/index'
+import { Route as DashboardLayoutSettingsIndexRouteImport } from './routes/dashboard/_layout/settings/index'
+import { Route as DashboardLayoutUsersIdRouteImport } from './routes/dashboard/_layout/users/$id'
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
@@ -22,31 +27,94 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DashboardLayoutRoute = DashboardLayoutRouteImport.update({
+  id: '/dashboard/_layout',
+  path: '/dashboard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardLayoutIndexRoute = DashboardLayoutIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DashboardLayoutRoute,
+} as any)
+const DashboardLayoutUsersIndexRoute =
+  DashboardLayoutUsersIndexRouteImport.update({
+    id: '/users/',
+    path: '/users/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutSettingsIndexRoute =
+  DashboardLayoutSettingsIndexRouteImport.update({
+    id: '/settings/',
+    path: '/settings/',
+    getParentRoute: () => DashboardLayoutRoute,
+  } as any)
+const DashboardLayoutUsersIdRoute = DashboardLayoutUsersIdRouteImport.update({
+  id: '/users/$id',
+  path: '/users/$id',
+  getParentRoute: () => DashboardLayoutRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/dashboard': typeof DashboardLayoutRouteWithChildren
+  '/dashboard/': typeof DashboardLayoutIndexRoute
+  '/dashboard/users/$id': typeof DashboardLayoutUsersIdRoute
+  '/dashboard/settings/': typeof DashboardLayoutSettingsIndexRoute
+  '/dashboard/users/': typeof DashboardLayoutUsersIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/dashboard': typeof DashboardLayoutIndexRoute
+  '/dashboard/users/$id': typeof DashboardLayoutUsersIdRoute
+  '/dashboard/settings': typeof DashboardLayoutSettingsIndexRoute
+  '/dashboard/users': typeof DashboardLayoutUsersIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/login': typeof LoginRoute
+  '/dashboard/_layout': typeof DashboardLayoutRouteWithChildren
+  '/dashboard/_layout/': typeof DashboardLayoutIndexRoute
+  '/dashboard/_layout/users/$id': typeof DashboardLayoutUsersIdRoute
+  '/dashboard/_layout/settings/': typeof DashboardLayoutSettingsIndexRoute
+  '/dashboard/_layout/users/': typeof DashboardLayoutUsersIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login'
+  fullPaths:
+    | '/'
+    | '/login'
+    | '/dashboard'
+    | '/dashboard/'
+    | '/dashboard/users/$id'
+    | '/dashboard/settings/'
+    | '/dashboard/users/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login'
-  id: '__root__' | '/' | '/login'
+  to:
+    | '/'
+    | '/login'
+    | '/dashboard'
+    | '/dashboard/users/$id'
+    | '/dashboard/settings'
+    | '/dashboard/users'
+  id:
+    | '__root__'
+    | '/'
+    | '/login'
+    | '/dashboard/_layout'
+    | '/dashboard/_layout/'
+    | '/dashboard/_layout/users/$id'
+    | '/dashboard/_layout/settings/'
+    | '/dashboard/_layout/users/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   LoginRoute: typeof LoginRoute
+  DashboardLayoutRoute: typeof DashboardLayoutRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +133,66 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dashboard/_layout': {
+      id: '/dashboard/_layout'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardLayoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard/_layout/': {
+      id: '/dashboard/_layout/'
+      path: '/'
+      fullPath: '/dashboard/'
+      preLoaderRoute: typeof DashboardLayoutIndexRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/dashboard/_layout/users/': {
+      id: '/dashboard/_layout/users/'
+      path: '/users'
+      fullPath: '/dashboard/users/'
+      preLoaderRoute: typeof DashboardLayoutUsersIndexRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/dashboard/_layout/settings/': {
+      id: '/dashboard/_layout/settings/'
+      path: '/settings'
+      fullPath: '/dashboard/settings/'
+      preLoaderRoute: typeof DashboardLayoutSettingsIndexRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
+    '/dashboard/_layout/users/$id': {
+      id: '/dashboard/_layout/users/$id'
+      path: '/users/$id'
+      fullPath: '/dashboard/users/$id'
+      preLoaderRoute: typeof DashboardLayoutUsersIdRouteImport
+      parentRoute: typeof DashboardLayoutRoute
+    }
   }
 }
+
+interface DashboardLayoutRouteChildren {
+  DashboardLayoutIndexRoute: typeof DashboardLayoutIndexRoute
+  DashboardLayoutUsersIdRoute: typeof DashboardLayoutUsersIdRoute
+  DashboardLayoutSettingsIndexRoute: typeof DashboardLayoutSettingsIndexRoute
+  DashboardLayoutUsersIndexRoute: typeof DashboardLayoutUsersIndexRoute
+}
+
+const DashboardLayoutRouteChildren: DashboardLayoutRouteChildren = {
+  DashboardLayoutIndexRoute: DashboardLayoutIndexRoute,
+  DashboardLayoutUsersIdRoute: DashboardLayoutUsersIdRoute,
+  DashboardLayoutSettingsIndexRoute: DashboardLayoutSettingsIndexRoute,
+  DashboardLayoutUsersIndexRoute: DashboardLayoutUsersIndexRoute,
+}
+
+const DashboardLayoutRouteWithChildren = DashboardLayoutRoute._addFileChildren(
+  DashboardLayoutRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   LoginRoute: LoginRoute,
+  DashboardLayoutRoute: DashboardLayoutRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
