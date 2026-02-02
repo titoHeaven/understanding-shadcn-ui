@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from '@tanstack/react-router'
 import {
   Card,
   CardContent,
@@ -13,7 +14,17 @@ import { Button } from '../ui/button'
 export function LoginForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const navigate = useNavigate()
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    const userId = Math.floor(Math.random() * 1000)
+
+    navigate({
+      to: '/dashboard/users/$id',
+      params: { id: String(userId) },
+    })
+  }
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="p-4 bg-gray-300">
@@ -23,17 +34,30 @@ export function LoginForm() {
         </CardDescription>
       </CardHeader>
       <CardContent className="px-4">
-        <form>
+        <form onSubmit={handleSubmit}>
           <div>
             <div className="pb-3">
               <Label htmlFor="email">Email</Label>
-              <Input type="email" placeholder="heavenson@gmail.com" />
+              <Input
+                type="email"
+                placeholder="heavenson@gmail.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
             </div>
             <div className="pb-3">
               <Label htmlFor="password">Password</Label>
-              <Input type="password" />
+              <Input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
             </div>
-            <Button className="w-full">Login</Button>
+            <Button className="w-full" type="submit">
+              Login
+            </Button>
           </div>
           <div className="flex justify-center translate-x-5 translate-y-2">
             <Label className="gap-0">
