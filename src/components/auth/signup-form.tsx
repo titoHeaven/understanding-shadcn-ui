@@ -27,6 +27,7 @@ export function SignupForm() {
         onSuccess: (data) => {
           toast.success('Signup Successful! 🎉')
           console.log('Signup Success!', data)
+          navigate({ to: '/login' })
         },
         onError: (err: any) => {
           toast.error('Signup Failed ❌')
