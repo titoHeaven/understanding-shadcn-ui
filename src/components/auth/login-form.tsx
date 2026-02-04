@@ -43,7 +43,6 @@ export function LoginForm() {
                 placeholder="heavenson@gmail.com"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                required
               />
             </div>
             <div className="pb-3">
@@ -52,7 +51,6 @@ export function LoginForm() {
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
               />
             </div>
             <Button className="w-full" type="submit">
@@ -62,7 +60,11 @@ export function LoginForm() {
           <div className="flex justify-center translate-x-5 translate-y-2">
             <Label className="gap-0">
               Don't have an account?
-              <Button variant={'link'} className="text-blue-600 -translate-x-2">
+              <Button
+                variant={'link'}
+                onClick={() => navigate({ to: '/signup' })}
+                className="text-blue-600 -translate-x-2"
+              >
                 Sign Up
               </Button>
             </Label>
